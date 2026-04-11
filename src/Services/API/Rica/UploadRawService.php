@@ -9,6 +9,7 @@ use SDKLimes\API\Rica\Upload\UploadUploadPoaParams;
 use SDKLimes\Client;
 use SDKLimes\Core\Contracts\BaseResponse;
 use SDKLimes\Core\Exceptions\APIException;
+use SDKLimes\Core\FileParam;
 use SDKLimes\RequestOptions;
 use SDKLimes\ServiceContracts\API\Rica\UploadRawContract;
 
@@ -26,7 +27,7 @@ final class UploadRawService implements UploadRawContract
     /**
      * @api
      *
-     * @param array{file?: string}|UploadUploadIDParams $params
+     * @param array{file?: string|FileParam}|UploadUploadIDParams $params
      * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<mixed>
@@ -56,7 +57,7 @@ final class UploadRawService implements UploadRawContract
     /**
      * @api
      *
-     * @param array{file?: string}|UploadUploadPoaParams $params
+     * @param array{file?: string|FileParam}|UploadUploadPoaParams $params
      * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<mixed>

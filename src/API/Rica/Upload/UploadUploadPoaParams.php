@@ -8,11 +8,12 @@ use SDKLimes\Core\Attributes\Optional;
 use SDKLimes\Core\Concerns\SdkModel;
 use SDKLimes\Core\Concerns\SdkParams;
 use SDKLimes\Core\Contracts\BaseModel;
+use SDKLimes\Core\FileParam;
 
 /**
  * @see SDKLimes\Services\API\Rica\UploadService::uploadPoa()
  *
- * @phpstan-type UploadUploadPoaParamsShape = array{file?: string|null}
+ * @phpstan-type UploadUploadPoaParamsShape = array{file?: string|null|FileParam}
  */
 final class UploadUploadPoaParams implements BaseModel
 {
@@ -33,7 +34,7 @@ final class UploadUploadPoaParams implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      */
-    public static function with(?string $file = null): self
+    public static function with(string|FileParam|null $file = null): self
     {
         $self = new self;
 
@@ -42,7 +43,7 @@ final class UploadUploadPoaParams implements BaseModel
         return $self;
     }
 
-    public function withFile(string $file): self
+    public function withFile(string|FileParam $file): self
     {
         $self = clone $this;
         $self['file'] = $file;
