@@ -112,6 +112,36 @@ $client = new Client(requestOptions: ['maxRetries' => 0]);
 $result = $client->api->auth->createToken(requestOptions: ['maxRetries' => 5]);
 ```
 
+### File uploads
+
+Request parameters that correspond to file uploads can be passed as a resource returned by `fopen()`, a string of file contents, or a `FileParam` instance.
+
+```php
+<?php
+
+use SDKLimes\Core\FileParam;
+
+// Pass a string with filename and content type:
+$contents = file_get_contents('/path/to/file');
+// Pass a string with filename and content type:
+$result = $client->api->rica->upload->uploadID(
+  file: FileParam::fromString($contents, filename: '/path/to/file', contentType: '…'),
+);
+
+// Pass in only a string (where applicable)
+$result = $client->api->rica->upload->uploadID(file: '…');
+
+// Pass an open resource:
+$fd = fopen('/path/to/file', 'r');
+try {
+  $result = $client->api->rica->upload->uploadID(
+    file: FileParam::fromResource($fd, filename: '/path/to/file', contentType: '…'),
+  );
+} finally {
+  fclose($fd);
+}
+```
+
 ## Advanced concepts
 
 ### Making custom or undocumented requests

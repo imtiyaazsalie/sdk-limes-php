@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SDKLimes\ServiceContracts\API\Rica;
 
 use SDKLimes\Core\Exceptions\APIException;
+use SDKLimes\Core\FileParam;
 use SDKLimes\RequestOptions;
 
 /**
@@ -20,8 +21,8 @@ interface UploadContract
      * @throws APIException
      */
     public function uploadID(
-        ?string $file = null,
-        RequestOptions|array|null $requestOptions = null
+        string|FileParam|null $file = null,
+        RequestOptions|array|null $requestOptions = null,
     ): mixed;
 
     /**
@@ -32,7 +33,7 @@ interface UploadContract
      * @throws APIException
      */
     public function uploadPoa(
-        ?string $file = null,
-        RequestOptions|array|null $requestOptions = null
+        string|FileParam|null $file = null,
+        RequestOptions|array|null $requestOptions = null,
     ): mixed;
 }
