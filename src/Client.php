@@ -7,6 +7,7 @@ namespace SDKLimes;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
 use SDKLimes\Core\BaseClient;
+use SDKLimes\Core\Implementation\StreamingHttpClient;
 use SDKLimes\Core\Util;
 use SDKLimes\Services\APIService;
 use SDKLimes\Services\HealthService;
@@ -52,6 +53,11 @@ class Client extends BaseClient
             ),
             $requestOptions,
         );
+
+        if (is_null($options->streamingTransporter)) {
+            assert(!is_null($options->transporter));
+            $options->streamingTransporter = new StreamingHttpClient($options->transporter);
+        }
 
         /** @var array<string, string|null> $headers */
         $headers = [
