@@ -6,6 +6,7 @@ namespace SDKLimes\Services\API\Rica;
 
 use SDKLimes\Client;
 use SDKLimes\Core\Exceptions\APIException;
+use SDKLimes\Core\FileParam;
 use SDKLimes\Core\Util;
 use SDKLimes\RequestOptions;
 use SDKLimes\ServiceContracts\API\Rica\UploadContract;
@@ -36,8 +37,8 @@ final class UploadService implements UploadContract
      * @throws APIException
      */
     public function uploadID(
-        ?string $file = null,
-        RequestOptions|array|null $requestOptions = null
+        string|FileParam|null $file = null,
+        RequestOptions|array|null $requestOptions = null,
     ): mixed {
         $params = Util::removeNulls(['file' => $file]);
 
@@ -55,8 +56,8 @@ final class UploadService implements UploadContract
      * @throws APIException
      */
     public function uploadPoa(
-        ?string $file = null,
-        RequestOptions|array|null $requestOptions = null
+        string|FileParam|null $file = null,
+        RequestOptions|array|null $requestOptions = null,
     ): mixed {
         $params = Util::removeNulls(['file' => $file]);
 

@@ -7,6 +7,7 @@ namespace SDKLimes;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
 use SDKLimes\Core\BaseClient;
+use SDKLimes\Core\Implementation\StreamingHttpClient;
 use SDKLimes\Core\Util;
 use SDKLimes\Services\APIService;
 use SDKLimes\Services\HealthService;
@@ -53,18 +54,36 @@ class Client extends BaseClient
             $requestOptions,
         );
 
+        if (is_null($options->streamingTransporter)) {
+            assert(!is_null($options->transporter));
+            $options->streamingTransporter = new StreamingHttpClient($options->transporter);
+        }
+
+        /** @var array<string, string|null> $headers */
+        $headers = [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+            'User-Agent' => sprintf('sdk-limes/PHP %s', VERSION),
+            'X-Stainless-Lang' => 'php',
+            'X-Stainless-Package-Version' => '0.0.1',
+            'X-Stainless-Arch' => Util::machtype(),
+            'X-Stainless-OS' => Util::ostype(),
+            'X-Stainless-Runtime' => php_sapi_name(),
+            'X-Stainless-Runtime-Version' => phpversion(),
+        ];
+
+        $customHeadersEnv = Util::getenv('SDK_LIMES_CUSTOM_HEADERS');
+        if (null !== $customHeadersEnv) {
+            foreach (explode("\n", $customHeadersEnv) as $line) {
+                $colon = strpos($line, ':');
+                if (false !== $colon) {
+                    $headers[trim(substr($line, 0, $colon))] = trim(substr($line, $colon + 1));
+                }
+            }
+        }
+
         parent::__construct(
-            headers: [
-                'Content-Type' => 'application/json',
-                'Accept' => 'application/json',
-                'User-Agent' => sprintf('sdk-limes/PHP %s', VERSION),
-                'X-Stainless-Lang' => 'php',
-                'X-Stainless-Package-Version' => '0.0.1',
-                'X-Stainless-Arch' => Util::machtype(),
-                'X-Stainless-OS' => Util::ostype(),
-                'X-Stainless-Runtime' => php_sapi_name(),
-                'X-Stainless-Runtime-Version' => phpversion(),
-            ],
+            headers: $headers,
             baseUrl: $baseUrl,
             options: $options
         );

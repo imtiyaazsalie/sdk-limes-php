@@ -10,12 +10,14 @@ It is generated with [Stainless](https://www.stainless.com/).
 
 To use this package, install via Composer by adding the following to your application's `composer.json`:
 
+<!-- x-release-please-start-version -->
+
 ```json
 {
   "repositories": [
     {
       "type": "vcs",
-      "url": "git@github.com:stainless-sdks/sdk-limes-php.git"
+      "url": "git@github.com:imtiyaazsalie/sdk-limes-php.git"
     }
   ],
   "require": {
@@ -23,6 +25,8 @@ To use this package, install via Composer by adding the following to your applic
   }
 }
 ```
+
+<!-- x-release-please-end -->
 
 ## Usage
 
@@ -108,6 +112,36 @@ $client = new Client(requestOptions: ['maxRetries' => 0]);
 $result = $client->api->auth->createToken(requestOptions: ['maxRetries' => 5]);
 ```
 
+### File uploads
+
+Request parameters that correspond to file uploads can be passed as a resource returned by `fopen()`, a string of file contents, or a `FileParam` instance.
+
+```php
+<?php
+
+use SDKLimes\Core\FileParam;
+
+// Pass a string with filename and content type:
+$contents = file_get_contents('/path/to/file');
+// Pass a string with filename and content type:
+$result = $client->api->rica->upload->uploadID(
+  file: FileParam::fromString($contents, filename: '/path/to/file', contentType: '…'),
+);
+
+// Pass in only a string (where applicable)
+$result = $client->api->rica->upload->uploadID(file: '…');
+
+// Pass an open resource:
+$fd = fopen('/path/to/file', 'r');
+try {
+  $result = $client->api->rica->upload->uploadID(
+    file: FileParam::fromResource($fd, filename: '/path/to/file', contentType: '…'),
+  );
+} finally {
+  fclose($fd);
+}
+```
+
 ## Advanced concepts
 
 ### Making custom or undocumented requests
@@ -162,4 +196,4 @@ PHP 8.1.0 or higher.
 
 ## Contributing
 
-See [the contributing documentation](https://github.com/stainless-sdks/sdk-limes-php/tree/main/CONTRIBUTING.md).
+See [the contributing documentation](https://github.com/imtiyaazsalie/sdk-limes-php/tree/main/CONTRIBUTING.md).
